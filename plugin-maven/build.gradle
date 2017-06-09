@@ -14,3 +14,33 @@ dependencies {
 	testCompile "org.assertj:assertj-core:${VER_ASSERTJ}"
 	testCompile "com.diffplug.durian:durian-testlib:${VER_DURIAN}"
 }
+
+task templatePom(type: Copy) {
+	def props = (project.ext.properties + [group: project.group, description: project.description])
+
+	inputs.properties(props)
+
+	outputs.file('pom.xml')
+	from('.') {
+		include 'pom.tpl.xml'
+		rename('\\.tpl', '')
+	}
+	into '.'
+	expand props
+}
+
+task buildMaven(type: Exec, dependsOn: templatePom) {
+	boolean isWindows = System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')
+	List<String> cmd = isWindows ?
+					['cmd', '/c',  'mvnw'] : //on windows
+					['sh', './mvnw'] //on linux
+	commandLine cmd + ['-V' ,'package', 'verify']
+
+	inputs.file('pom.xml')
+	inputs.sourceDir('src')
+	outputs.dir('target')
+
+	doFirst {
+		standardOutput = file('build/buildMaven.log').newOutputStream()
+	}
+}

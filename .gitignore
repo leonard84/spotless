@@ -23,7 +23,6 @@ gradle-app.setting
 ### Eclipse ###
 *.pydevproject
 .metadata
-.gradle
 bin/
 tmp/
 *.tmp
@@ -113,10 +112,15 @@ crashlytics-build.properties
 
 ### NetBeans ###
 nbproject/private/
-build/
 nbbuild/
 dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
 .nb-gradle/
+
+### Maven ###
+/plugin-maven/pom.xml
+/plugin-maven/target
+!/plugin-maven/.mvn/wrapper/maven-wrapper.jar
+!/plugin-maven/.mvn/wrapper/maven-wrapper.properties
